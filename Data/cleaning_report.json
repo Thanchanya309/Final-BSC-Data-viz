@@ -1,0 +1,63 @@
+{
+  "period": "2020-01-01 to 2022-12-31",
+  "status": "cleaned_not_causally_joined",
+  "AI_Incident": {
+    "raw_rows": 1775,
+    "period_rows_before_dedup": 280,
+    "period_duplicate_incident_ids": 0,
+    "period_missing_risk_subdomain": 6,
+    "selected_relevant_rows": 59,
+    "excluded_nonmatching_subdomains": 221,
+    "selection_rule": [
+      "False or misleading information",
+      "Disinformation, surveillance, and influence at scale",
+      "Fraud, scams, and targeted manipulation"
+    ],
+    "notes": "Scope is a documented subset of AI incidents; excluded rows are not invalid."
+  },
+  "EUvsDisinfo": {
+    "raw_rows": 18249,
+    "period_rows_before_dedup": 12186,
+    "duplicate_debunk_article_class_rows": 0,
+    "clean_article_rows": 12186,
+    "unique_debunk_ids": 4820,
+    "debunks_with_multiple_dates": 0,
+    "missing_keywords_article_rows": 34,
+    "article_class_counts": {
+      "disinformation": 7361,
+      "trustworthy": 4825
+    },
+    "notes": "Never sum article rows as distinct debunks; class labels describe source articles."
+  },
+  "Thai_AFNC": {
+    "raw_rows": 17726,
+    "period_all_post_types": 5125,
+    "period_verdict_rows_before_dedup": 4627,
+    "duplicate_post_ids": 0,
+    "clean_verdict_rows": 4627,
+    "verdict_counts": {
+      "Fake": 3066,
+      "True": 1071,
+      "Distorted": 490
+    },
+    "missing_verdict": 0,
+    "notes": "Counts represent AFNC verdict posts, not all misinformation or victims."
+  },
+  "coverage_months": {
+    "AI_filtered": 27,
+    "EU_debunks": 36,
+    "Thai_verdicts": 36
+  },
+  "data_sources": [
+    "01 AI Incident Database",
+    "03 EUvsDisinfo",
+    "04 Thai Disinformation and Scams"
+  ],
+  "limitations": [
+    "Monthly presence does not imply complete population coverage",
+    "No event-level cross-source join",
+    "AI scope is restricted to three risk subdomains",
+    "EU article_class is not debunk truth label",
+    "Thai views do not measure victims"
+  ]
+}

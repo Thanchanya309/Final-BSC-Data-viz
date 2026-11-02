@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>การวิเคราะห์ข่าวปลอมและภัยหลอกลวงออนไลน์ในยุค AI (2020–2022)</title>
+  <link rel="stylesheet" href="css/main.css">
+  <!-- Apache ECharts CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- DASHBOARD HEADER -->
+    <header class="app-header">
+      <div class="header-top">
+        <div class="header-title-group">
+          <div class="badge-tag">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="16" x2="12" y2="12"/>
+              <line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+            <span>โครงงาน Data Visualization | Academic Research Dashboard</span>
+          </div>
+          <h1 class="app-title">การวิเคราะห์ข่าวปลอมและภัยหลอกลวงออนไลน์ในยุค AI: เปรียบเทียบสถานการณ์ประเทศไทยและต่างประเทศ ปี 2020–2022</h1>
+          <p class="app-subtitle">Analysis of Online Disinformation and Digital Fraud Risks in the AI Era (2020–2022)</p>
+        </div>
+        <div class="header-metadata">
+          <div class="metadata-pill">
+            <span>ช่วงเวลาศึกษา:</span>
+            <strong>2020–2022 (36 เดือน)</strong>
+          </div>
+          <div class="metadata-pill">
+            <span>สถานะข้อมูล:</span>
+            <strong style="color: #10b981;">Cleaned & Validated</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB NAVIGATION -->
+      <nav class="tab-navigation">
+        <button class="tab-btn active" data-tab="ai">
+          <span class="tab-dot"></span>
+          <span>1. AI Risks (ความเสี่ยงจาก AI)</span>
+        </button>
+        <button class="tab-btn" data-tab="eu">
+          <span class="tab-dot"></span>
+          <span>2. Global Disinformation (EUvsDisinfo)</span>
+        </button>
+        <button class="tab-btn" data-tab="thai">
+          <span class="tab-dot"></span>
+          <span>3. Thai Fake News (ศูนย์ต่อต้านข่าวปลอมไทย)</span>
+        </button>
+      </nav>
+    </header>
+
+    <!-- GLOBAL FILTER BAR -->
+    <section class="filter-bar-container">
+      <div class="filter-bar-header">
+        <div class="filter-controls-group">
+          <!-- Year Filter -->
+          <div class="filter-control-item">
+            <span class="filter-label">ปี (Year):</span>
+            <div class="quick-years">
+              <button class="quick-year-btn active" data-year="all">All</button>
+              <button class="quick-year-btn" data-year="2020">2020</button>
+              <button class="quick-year-btn" data-year="2021">2021</button>
+              <button class="quick-year-btn" data-year="2022">2022</button>
+            </div>
+            <select id="global-year-select" class="filter-select" style="display: none;">
+              <option value="all">ทุกปี (2020–2022)</option>
+              <option value="2020">2020</option>
+              <option value="2021">2021</option>
+              <option value="2022">2022</option>
+            </select>
+          </div>
+
+          <!-- Month Filter -->
+          <div class="filter-control-item">
+            <span class="filter-label">เดือน (Month):</span>
+            <select id="global-month-select" class="filter-select">
+              <option value="all">ทุกเดือน (All Months)</option>
+              <option value="1">01 มกราคม (Jan)</option>
+              <option value="2">02 กุมภาพันธ์ (Feb)</option>
+              <option value="3">03 มีนาคม (Mar)</option>
+              <option value="4">04 เมษายน (Apr)</option>
+              <option value="5">05 พฤษภาคม (May)</option>
+              <option value="6">06 มิถุนายน (Jun)</option>
+              <option value="7">07 กรกฎาคม (Jul)</option>
+              <option value="8">08 สิงหาคม (Aug)</option>
+              <option value="9">09 กันยายน (Sep)</option>
+              <option value="10">10 ตุลาคม (Oct)</option>
+              <option value="11">11 พฤศจิกายน (Nov)</option>
+              <option value="12">12 ธันวาคม (Dec)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Filter Actions -->
+        <div class="filter-actions">
+          <button id="btn-clear-tab-filters" class="btn-secondary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
+            <span>ล้างตัวกรองแท็บ (Clear Tab Filters)</span>
+          </button>
+          <button id="btn-clear-all-filters" class="btn-secondary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 4v6h6M23 20v-6h-6"/>
+              <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
+            </svg>
+            <span>ล้างทั้งหมด (Clear All)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Active Filter Chips Area -->
+      <div class="active-chips-area">
+        <span class="chips-label">Active Filters:</span>
+        <div id="active-chips-list" style="display: inline-flex; gap: 0.4rem; flex-wrap: wrap;"></div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 1: AI RISKS PANEL                      -->
+    <!-- ========================================== -->
+    <main id="tab-panel-ai" class="tab-view-panel">
+      <!-- Question Banner -->
+      <div class="tab-header-banner">
+        <div class="tab-question-box">
+          <div class="question-icon-badge badge-ai">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+          </div>
+          <div class="tab-question-text">
+            <div class="tab-badge-row">
+              <span class="tab-badge ai">Research Question Q1–Q3</span>
+            </div>
+            <h2 class="tab-research-question">"เหตุการณ์ความเสี่ยงจาก AI ที่เกี่ยวข้องกับข้อมูลผิด ข้อมูลบิดเบือน และการหลอกลวงออนไลน์ มีแนวโน้มและประเภทอย่างไรในช่วงปี 2020–2022?"</h2>
+            <p class="tab-scope-desc">แหล่งข้อมูล: AI Incident Database (AIID) | คัดกรองเฉพาะ 3 Risk Subdomains ที่ศึกษา (59 เหตุการณ์ ไม่ซ้ำ ใน 27 เดือนที่มีบันทึก)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bento KPI Cards -->
+      <div id="ai-kpi-container" class="bento-kpi-grid"></div>
+
+      <!-- Dynamic Insights Banner -->
+      <div id="ai-insights-container" class="insights-banner" data-tab="ai"></div>
+
+      <!-- Bento Charts Grid: Row 1 -->
+      <div class="bento-chart-grid-2col">
+        <!-- Chart A1 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <span class="chart-id-badge">CHART A1</span>
+              <h3 class="chart-title">แนวโน้มเหตุการณ์ AI รายเดือน (Monthly AI Incident Trend)</h3>
+              <p class="chart-subtitle">แสดงการกระจายตัวตามเส้นเวลา 36 เดือน (คลิกจุดกราฟเพื่อเลือกเดือน)</p>
+            </div>
+            <span class="chart-hint-pill">Click to Filter</span>
+          </div>
+          <div id="chart-a1" class="chart-body"></div>
+          <div class="chart-card-footer">
+            <span class="chart-source-text">Source: AI Incident Database | Period: 2020–2022 | Unit: Distinct incident count (incident_id)</span>
+          </div>
+        </div>
+
+        <!-- Chart A2 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <span class="chart-id-badge">CHART A2</span>
+              <h3 class="chart-title">ประเภทความเสี่ยง AI จำแนกตามปี (Risk Types by Year)</h3>
+              <p class="chart-subtitle">สัดส่วนกลุ่มความเสี่ยง 3 ประเภทในแต่ละปี (คลิกแท่งเพื่อ Cross-filter)</p>
+            </div>
+            <span class="chart-hint-pill">Click to Filter</span>
+          </div>
+          <div id="chart-a2" class="chart-body"></div>
+          <div class="chart-card-footer">
+            <span class="chart-source-text">Source: AI Incident Database | Period: 2020–2022 | Unit: Distinct incident count | Stack: topic_group</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bento Charts Grid: Row 2 -->
+      <div class="bento-chart-grid-2col">
+        <!-- Chart A3 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <span class="chart-id-badge">CHART A3</span>
+              <h3 class="chart-title">อันดับหมวดย่อยความเสี่ยงที่ถูกบันทึก (Most Reported Risk Subdomains)</h3>
+              <p class="chart-subtitle">จำแนกตามนิยามมาตรฐาน CSET / MIT Taxonomy (คลิกแท่งเพื่อกรอง)</p>
+            </div>
+            <span class="chart-hint-pill">Click to Filter</span>
+          </div>
+          <div id="chart-a3" class="chart-body"></div>
+          <div class="chart-card-footer">
+            <span class="chart-source-text">Source: AI Incident Database | Period: 2020–2022 | Unit: Distinct incidents by risk_subdomain</span>
+          </div>
+        </div>
+
+        <!-- Chart A4 Fallback -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <span class="chart-id-badge">CHART A4 (FALLBACK)</span>
+              <h3 class="chart-title">กลุ่มและบุคคลที่ถูกระบุในเหตุการณ์ AI (Recorded Affected Entities)</h3>
+              <p class="chart-subtitle">แสดงรายการตามข้อความจริงในฐานข้อมูล (Taxonomy Unverified)</p>
+            </div>
+          </div>
+          <div id="chart-a4-fallback-content" style="flex: 1; display: flex; flex-direction: column; justify-content: center;"></div>
+          <div class="chart-card-footer">
+            <span class="chart-source-text">Source: AIID raw harmed text | สถานะ: แสดงรายการตัวอย่างตามบันทึกจริงเพื่อป้องกันการจัดกลุ่มผิดพลาด</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Evidence Table -->
+      <div id="ai-table-container" class="table-card"></div>
+    </main>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: GLOBAL DISINFORMATION PANEL         -->
+    <!-- ========================================== -->
+    <main id="tab-panel-eu" class="tab-view-panel" style="display: none;">
+      <!-- Question Banner -->
+      <div class="tab-header-banner">
+        <div class="tab-question-box">
+          <div class="question-icon-badge badge-eu">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+          </div>
+          <div class="tab-question-text">
+            <div class="tab-badge-row">
+              <span class="tab-badge eu">Research Question Q4–Q6</span>
+            </div>
+            <h2 class="tab-research-question">"ข้อมูลบิดเบือนที่ EUvsDisinfo ตรวจสอบมีแนวโน้มและประเด็นสำคัญอย่างไร และบทความที่เกี่ยวข้องปรากฏในภาษาและโดเมนใดบ้าง?"</h2>
+            <p class="tab-scope-desc">แหล่งข้อมูล: EUvsDisinfo (4,820 เรื่องตรวจสอบไม่ซ้ำ | 12,186 ความสัมพันธ์บทความ) | ข้อควรระวัง: ไม่ใช่ตัวแทนข่าวปลอมทั้งหมดในโลก</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bento KPI Cards -->
+      <div id="eu-kpi-container" class="bento-kpi-grid"></div>
+
+      <!-- Dynamic Insights Banner -->
+      <div id="eu-insights-container" class="insights-banner" data-tab="eu"></div>
+
+      <!-- Bento Charts Grid: Row 1 -->
+      <div class="bento-chart-grid-2col">
+        <!-- Chart E1 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <span class="chart-id-badge">CHART E1</span>
+              <h3 class="chart-title">แนวโน้มจำนวนเรื่องตรวจสอบรายเดือน (Monthly Debunk Trend)</h3>
+              <p class="chart-subtitle">นับตามจำนวนเรื่องตรวจสอบไม่ซ้ำ (คลิกเพื่อเลือกช่วงเวลา)</p>
+            </div>
+            <span class="chart-hint-pill">Click to Filter</span>
+          </div>
+          <div id="chart-e1" class="chart-body"></div>
+          <div class="chart-card-footer">
+            <span class="chart-source-text">Source: EUvsDisinfo | Period: 2020–2022 | Unit: Distinct debunk count (debunk_id)</span>
+          </div>
+        </div>
+
+        <!-- Chart E2 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <span class="chart-id-badge">CHART E2</span>
+              <h3 class="chart-title">10 คำสำคัญที่พบมากที่สุด (Top 10 Keywords)</h3>
+              <p class="chart-subtitle">นับจำนวนเรื่องตรวจสอบไม่ซ้ำที่มีคำสำคัญนั้น (คลิกเพื่อกรอง)</p>
+            </div>
+            <span class="chart-hint-pill">Click to Filter</span>
+          </div>
+          <div id="chart-e2" class="chart-body"></div>
+          <div class="chart-card-footer">
+            <span class="chart-source-text">Source: EUvsDisinfo keywords | Unit: Distinct debunks containing keyword</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bento Charts Grid: Row 2 -->
+      <div class="bento-chart-grid-full">
+        <!-- Chart E3 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <span class="chart-id-badge">CHART E3 (FALLBACK FOR UNVERIFIED TOPIC MAPPING)</span>
+              <h3 class="chart-title">ความสัมพันธ์บทความจำแนกตามประเภทและปี (Article Classes by Year)</h3>
+              <p class="chart-subtitle">สัดส่วนบทความที่เชื่อมโยง: Disinformation vs Trustworthy (คลิกเพื่อกรอง)</p>
+            </div>
+            <span class="chart-hint-pill">Click to Filter</span>
+          </div>
+          <div id="chart-e3" class="chart-body"></div>
+          <div class="chart-card-footer">
+            <span class="chart-source-text">Source: EUvsDisinfo article associations | หน่วยนับ: ความสัมพันธ์บทความ (Article Associations) ไม่ใช่จำนวน Debunks</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bento Charts Grid: Row 3 -->
+      <div class="bento-chart-grid-2col">
+        <!-- Chart E4 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <span class="chart-id-badge">CHART E4</span>
+              <h3 class="chart-title">10 ภาษาที่พบบ่อยในบทความ (Top 10 Languages)</h3>
+              <p class="chart-subtitle">นับตามความสัมพันธ์บทความ (คลิกเพื่อกรองภาษา)</p>
+            </div>
+            <span class="chart-hint-pill">Click to Filter</span>
+          </div>
+          <div id="chart-e4" class="chart-body"></div>
+          <div class="chart-card-footer">
+            <span class="chart-source-text">Source: EUvsDisinfo articles | Unit: Article associations by article_language</span>
+          </div>
+        </div>
+
+        <!-- Chart E5 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <span class="chart-id-badge">CHART E5</span>
+              <h3 class="chart-title">10 โดเมนที่พบบ่อยในบทความ (Top 10 Publishing Domains)</h3>
+              <p class="chart-subtitle">นับตามความสัมพันธ์บทความ (คลิกเพื่อกรองโดเมน)</p>
+            </div>
+            <span class="chart-hint-pill">Click to Filter</span>
+          </div>
+          <div id="chart-e5" class="chart-body"></div>
+          <div class="chart-card-footer">
+            <span class="chart-source-text">Source: EUvsDisinfo articles | Unit: Article associations by article_domain</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Evidence Table -->
+      <div id="eu-table-container" class="table-card"></div>
+    </main>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: THAI FAKE NEWS PANEL                -->
+    <!-- ========================================== -->
+    <main id="tab-panel-thai" class="tab-view-panel" style="display: none;">
+      <!-- Question Banner -->
+      <div class="tab-header-banner">
+        <div class="tab-question-box">
+          <div class="question-icon-badge badge-thai">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div class="tab-question-text">
+            <div class="tab-badge-row">
+              <span class="tab-badge thai">Research Question Q7–Q9</span>
+            </div>
+            <h2 class="tab-research-question">"ข่าวที่ได้รับการตรวจสอบในประเทศไทยมีแนวโน้มและผลการตรวจสอบอย่างไร และข่าวปลอมด้านการเงิน สุขภาพ และนโยบายรัฐแตกต่างกันอย่างไร?"</h2>
+            <p class="tab-scope-desc">แหล่งข้อมูล: ศูนย์ต่อต้านข่าวปลอม ประเทศไทย (AFNC) | 4,627 โพสต์ที่มีผลคำตัดสิน (Fake / Distorted / True)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bento KPI Cards -->
+      <div id="thai-kpi-container" class="bento-kpi-grid"></div>
+
+      <!-- Dynamic Insights Banner -->
+      <div id="thai-insights-container" class="insights-banner" data-tab="thai"></div>
+
+      <!-- Bento Charts Grid: Row 1 -->
+      <div class="bento-chart-grid-2col">
+        <!-- Chart T1 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <span class="chart-id-badge">CHART T1</span>
+              <h3 class="chart-title">แนวโน้มข่าวปลอมรายเดือน (Monthly Fake News Trend)</h3>
+              <p class="chart-subtitle">นับเฉพาะข่าวที่ได้รับผลตรวจสอบ "ข่าวปลอม (Fake)" (คลิกเพื่อเลือกช่วงเวลา)</p>
+            </div>
+            <span class="chart-hint-pill">Click to Filter</span>
+          </div>
+          <div id="chart-t1" class="chart-body"></div>
+          <div class="chart-card-footer">
+            <span class="chart-source-text">Source: AFNC | Period: 2020–2022 | Unit: Distinct Fake post count (post_id)</span>
+          </div>
+        </div>
+
+        <!-- Chart T2 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <span class="chart-id-badge">CHART T2</span>
+              <h3 class="chart-title">ผลการตรวจสอบจำแนกตามปี (Verdict Distribution by Year)</h3>
+              <p class="chart-subtitle">สัดส่วนคำตัดสิน Fake / Distorted / True</p>
+            </div>
+            <div class="chart-actions">
+              <div class="chart-toggle-group">
+                <button id="toggle-t2-count" class="chart-toggle-btn active">Count</button>
+                <button id="toggle-t2-percent" class="chart-toggle-btn">100% Stacked</button>
+              </div>
+            </div>
+          </div>
+          <div id="chart-t2" class="chart-body"></div>
+          <div class="chart-card-footer">
+            <span class="chart-source-text">Source: AFNC verdicts | Unit: Distinct post_id | Fake (แดง), Distorted (ส้ม), True (เขียว)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bento Charts Grid: Row 2 -->
+      <div class="bento-chart-grid-full">
+        <!-- Chart T3 -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <span class="chart-id-badge">CHART T3</span>
+              <h3 class="chart-title">อันดับหมวดหมู่ข่าวปลอมที่พบมากที่สุด (Most Common Fake News Categories)</h3>
+              <p class="chart-subtitle">จัดอันดับตามจำนวนข่าวที่ได้รับผล Fake (คลิกแท่งเพื่อกรองเฉพาะหมวดหมู่)</p>
+            </div>
+            <div class="chart-actions">
+              <div class="chart-toggle-group">
+                <button id="toggle-t3-top5" class="chart-toggle-btn active">Top 5</button>
+                <button id="toggle-t3-all" class="chart-toggle-btn">All Categories</button>
+              </div>
+            </div>
+          </div>
+          <div id="chart-t3" class="chart-body"></div>
+          <div class="chart-card-footer">
+            <span class="chart-source-text">Source: AFNC | การคลิกเลือกหมวดหมู่จะกรอง Category โดยไม่บังคับ Verdict = Fake ในกราฟอื่น</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bento Charts Grid: Row 3 (Small Multiples) -->
+      <div class="bento-chart-grid-full">
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title-group">
+              <span class="chart-id-badge">CHART T4 (SMALL MULTIPLES)</span>
+              <h3 class="chart-title">เปรียบเทียบแนวโน้มข่าวปลอม 3 หมวดสำคัญ (Category Comparison: Finance, Health, Policy)</h3>
+              <p class="chart-subtitle">แสดงเส้นเวลาเดียวกัน (Same Timeline) และใช้สเกลแกน Y เท่ากันทุกกราฟ (Shared Y-axis Scale) เพื่อการเปรียบเทียบที่ไม่บิดเบือน</p>
+            </div>
+          </div>
+          <div id="chart-t4-container" style="width: 100%;"></div>
+          <div class="chart-card-footer">
+            <span class="chart-source-text">Source: AFNC | 3 Focus Categories: การเงิน-หุ้น, ผลิตภัณฑ์สุขภาพ, นโยบายรัฐบาล-ข่าวสาร | แกน Y เชื่อมโยงเท่ากันทั้งหมด</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Evidence Table -->
+      <div id="thai-table-container" class="table-card"></div>
+    </main>
+
+    <!-- FOOTER SECTION -->
+    <footer class="app-footer">
+      <div class="footer-col">
+        <h4 class="footer-title">ความโปร่งใสและข้อจำกัดของข้อมูล (Data Limitations)</h4>
+        <p class="footer-text">
+          แดชบอร์ดนี้นำเสนอข้อมูลเชิงพรรณนาจาก 3 แหล่งข้อมูลเพื่อการศึกษาทางวิชาการ (1) AI Incident Database (59 เหตุการณ์เข้าเกณฑ์), (2) EUvsDisinfo (4,820 เรื่องตรวจสอบ), (3) Anti-Fake News Center Thailand (4,627 ข่าวที่มีผลคำตัดสิน) ทั้งสามฐานข้อมูลมีกระบวนการและขอบเขตการจัดเก็บที่แตกต่างกัน จึงไม่นำมารวมยอดเข้าด้วยกันโดยตรง และไม่สามารถใช้พิสูจน์ความสัมพันธ์เชิงสาเหตุ (Causality) หรืออัตราการเกิดข่าวปลอมทั้งหมดในแต่ละประเทศได้
+        </p>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-title">มาตรฐานการคำนวณและการตรวจสอบ (Analytical Integrity)</h4>
+        <p class="footer-text">
+          - การนับจำนวนคงไว้ซึ่ง Data Grain ของแต่ละแหล่งอย่างเคร่งครัด<br>
+          - ไม่มีการแทรกหรือสมมติตัวเลขสถิติใด ๆ (No Fake / Mock Data)<br>
+          - ไม่มีโมเดลพยากรณ์ล่วงหน้า (No Forecasting)<br>
+          - ตัวเลขคำตัดสินและยอดวิวของ AFNC ไม่ใช่มูลค่าความเสียหายหรือจำนวนผู้ตกเป็นเหยื่อ
+        </p>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Application Scripts -->
+  <script src="js/data-store.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/data-transform.js"></script>
+  <script src="js/chart-manager.js"></script>
+  <script src="js/components/kpi-card.js"></script>
+  <script src="js/components/filter-bar.js"></script>
+  <script src="js/components/insights.js"></script>
+  <script src="js/components/data-table.js"></script>
+  <script src="js/tabs/tab-ai.js"></script>
+  <script src="js/tabs/tab-eu.js"></script>
+  <script src="js/tabs/tab-thai.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

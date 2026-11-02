@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ข่าวปลอมในยุค AI · Dashboard 2020–2022</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="bar">
+    <div class="brand">
+      <p class="eyebrow">DIGITAL DISINFORMATION AND AI RISK · 2020–2022</p>
+      <h1>ข่าวปลอมและภัยหลอกลวงออนไลน์ในยุค AI</h1>
+      <p class="intro">3 มุมมองจาก 3 แหล่งข้อมูล ไม่ได้เชื่อมรายเหตุการณ์ และไม่ควรนำยอดมารวมกัน · ช่วงที่แสดง: <b id="period"></b></p>
+    </div>
+    <nav class="tabs" id="tabs" role="tablist" aria-label="แท็บของ Dashboard">
+      <button type="button" role="tab" data-tab="ai">1 · ความเสี่ยงจาก AI<span class="count"></span></button>
+      <button type="button" role="tab" data-tab="eu">2 · ต่างประเทศ<span class="count"></span></button>
+      <button type="button" role="tab" data-tab="th">3 · ประเทศไทย<span class="count"></span></button>
+    </nav>
+  </div>
+  <div class="filters">
+    <div class="fgroup" id="years" role="group" aria-label="ปี (ใช้ร่วมทุกแท็บ)">
+      <span class="flabel">ปี</span>
+      <button type="button" data-year="all">ทั้งหมด</button><button type="button" data-year="2020">2020</button><button type="button" data-year="2021">2021</button><button type="button" data-year="2022">2022</button>
+    </div>
+    <label class="fgroup"><span class="flabel">เดือน</span>
+      <select id="month" aria-label="เดือน (ใช้ร่วมทุกแท็บ)">
+        <option value="all">ทุกเดือน</option>
+        <option value="1">มกราคม</option><option value="2">กุมภาพันธ์</option><option value="3">มีนาคม</option><option value="4">เมษายน</option><option value="5">พฤษภาคม</option><option value="6">มิถุนายน</option><option value="7">กรกฎาคม</option><option value="8">สิงหาคม</option><option value="9">กันยายน</option><option value="10">ตุลาคม</option><option value="11">พฤศจิกายน</option><option value="12">ธันวาคม</option>
+      </select></label>
+    <div class="fgroup local" id="local" aria-label="ตัวกรองเฉพาะแท็บ"></div>
+    <div class="factions">
+      <button type="button" class="ghost light" id="clear-tab">ล้างตัวกรองแท็บนี้</button>
+      <button type="button" class="ghost light" id="clear-all">ล้างทั้งหมด</button>
+    </div>
+  </div>
+  <div class="chips" id="chips" aria-live="polite"></div>
+</header>
+
+<main>
+  <div id="loading" class="loading"><p>กำลังโหลดข้อมูลจริงจาก CSV…</p></div>
+  <section class="tab" id="tab-ai" role="tabpanel" hidden></section>
+  <section class="tab" id="tab-eu" role="tabpanel" hidden></section>
+  <section class="tab" id="tab-th" role="tabpanel" hidden></section>
+</main>
+
+<footer class="foot">ข้อมูล: AI Incident Database · EUvsDisinfo (Leite et al., 2024) · ศูนย์ต่อต้านข่าวปลอม (AFNC) · ใช้ไฟล์ที่คลีนแล้ว 2020-01-01 ถึง 2022-12-31 · ไม่มีการพยากรณ์และไม่มีตัวเลขสมมติ · ปุ่มลัด: 1 2 3 สลับแท็บ, Esc ล้างทั้งหมด</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>
